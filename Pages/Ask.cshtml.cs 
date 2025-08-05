@@ -1,0 +1,41 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using AIInterviewCoach.Models;
+using AIInterviewCoach.Services;
+
+namespace AIInterviewCoach.Pages
+{
+    public class AskModel : PageModel
+    {
+        private static QuestionService _questionService = new QuestionService();
+        [BindProperty] public string UserAnswer { get; set; }
+
+        public InterviewQuestion Question { get; set; }
+        public int CurrentIndex { get; set; }
+        public int TotalQuestions => _questionService.ShuffledQuestions.Count;
+
+        public IActionResult OnGet(int index = 0)
+        {
+            if (index >= TotalQuestions)
+                return RedirectToPage("/Result");
+
+            Question = _questionService.ShuffledQuestions[index];
+            CurrentIndex = index;
+            return Page();
+        }
+
+        public IActionResult OnPost(int index = 0)
+        {
+            if (index < TotalQuestions)
+            {
+                var questionText = _questionService.ShuffledQuestions[index].QuestionText;
+                _questionService.AddUserAnswer(questionText, UserAnswer);
+                return RedirectToPage("/Ask", new { index = index + 1 });
+            }
+
+            return RedirectToPage("/Result");
+        }
+
+        public static QuestionService GetService() => _questionService;
+    }
+}

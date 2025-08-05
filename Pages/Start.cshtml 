@@ -1,0 +1,20 @@
+@page
+@model PageModel
+@{
+    ViewData["Title"] = "Start Interview";
+}
+
+<div class="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+    <div class="bg-white shadow-xl rounded-lg p-10 max-w-xl w-full text-center">
+        <h1 class="text-4xl font-bold text-blue-700 mb-6">AI Interview Coach</h1>
+
+        <p class="mb-8 text-lg text-gray-600">
+            Welcome to your virtual interview assistant. Click below to begin your simulation.
+        </p>
+
+        <a href="/Ask"
+           class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md text-lg shadow-lg transition">
+            🚀 Start Interview
+        </a>
+    </div>
+</div>

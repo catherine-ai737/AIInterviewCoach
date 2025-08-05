@@ -1,0 +1,59 @@
+@page
+@model AIInterviewCoach.Pages.ResultModel
+@{
+    ViewData["Title"] = "Interview Result";
+}
+
+<div class="min-h-screen bg-gray-100 p-6">
+    <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-8">
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">Interview Summary</h1>
+
+        @if (Model.UserAnswers.Any())
+        {
+            <div class="mb-6 text-center">
+                <p class="text-xl font-semibold text-gray-800">
+                    Total Score:
+                    <span class="text-green-600">@Model.TotalScore</span> /
+                    <span class="text-gray-600">@Model.MaxScore</span>
+                </p>
+                <p class="text-gray-600 mt-2 text-base">@Model.Feedback</p>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-blue-100 text-left">
+                            <th class="p-3 border-b">Question</th>
+                            <th class="p-3 border-b">Your Answer</th>
+                            <th class="p-3 border-b">Marks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var answer in Model.UserAnswers)
+                        {
+                            <tr class="hover:bg-gray-50 border-b">
+                                <td class="p-3">@answer.Question</td>
+                                <td class="p-3">@answer.GivenAnswer</td>
+                                <td class="p-3 font-semibold">@answer.Marks</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-red-600 font-semibold text-lg mt-6">
+                No answers found. Please complete the interview first.
+            </p>
+        }
+
+        <div class="text-center mt-8">
+            <a href="/Start"
+               class="inline-block bg-gray-700 hover:bg-gray-800 text-white px-5 py-2 rounded-md text-md shadow-sm">
+                🔁 Restart Interview
+            </a>
+        </div>
+    </div>
+</div>
+

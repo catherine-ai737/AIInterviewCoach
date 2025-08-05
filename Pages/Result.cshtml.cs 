@@ -1,0 +1,42 @@
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
+using AIInterviewCoach.Models;
+using AIInterviewCoach.Services;
+
+namespace AIInterviewCoach.Pages
+{
+    public class ResultModel : PageModel
+    {
+        public List<UserAnswer> UserAnswers { get; set; } = new();
+        public int TotalScore { get; set; }
+        public int MaxScore { get; set; }
+        public string Feedback { get; set; }
+
+        public void OnGet()
+        {
+            var service = AskModel.GetService();
+            UserAnswers = service.UserAnswers;
+            MaxScore = UserAnswers.Count * 10;
+            TotalScore = 0;
+
+            foreach (var ans in UserAnswers)
+            {
+                TotalScore += ans.Marks;
+            }
+
+            Feedback = GenerateFeedback(TotalScore, MaxScore);
+        }
+
+        private string GenerateFeedback(int score, int max)
+        {
+            double percent = (double)score / max * 100;
+
+            if (percent >= 85)
+                return "Excellent performance! You're interview-ready!";
+            else if (percent >= 60)
+                return "Good effort! Review some model answers and try again.";
+            else
+                return "Keep practicing. Focus on expressing your thoughts clearly.";
+        }
+    }
+}

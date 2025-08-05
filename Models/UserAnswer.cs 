@@ -1,0 +1,9 @@
+namespace AIInterviewCoach.Models
+{
+    public class UserAnswer
+    {
+        public string Question { get; set; }
+        public string GivenAnswer { get; set; }
+        public int Marks { get; set; }
+    }
+}
