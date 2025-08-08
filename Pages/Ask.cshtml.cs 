@@ -1,41 +1,35 @@
+cat > Pages/Ask.cshtml.cs <<'EOF'
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using AIInterviewCoach.Models;
-using AIInterviewCoach.Services;
 
 namespace AIInterviewCoach.Pages
 {
     public class AskModel : PageModel
     {
-        private static QuestionService _questionService = new QuestionService();
-        [BindProperty] public string UserAnswer { get; set; }
+        [BindProperty]
+        public UserAnswer UserAnswer { get; set; } = new UserAnswer();
 
-        public InterviewQuestion Question { get; set; }
-        public int CurrentIndex { get; set; }
-        public int TotalQuestions => _questionService.ShuffledQuestions.Count;
+        public string QuestionText { get; set; } = "Sample question for now.";
 
-        public IActionResult OnGet(int index = 0)
+        public void OnGet()
         {
-            if (index >= TotalQuestions)
-                return RedirectToPage("/Result");
-
-            Question = _questionService.ShuffledQuestions[index];
-            CurrentIndex = index;
-            return Page();
+            // Load actual question here later if needed
         }
 
-        public IActionResult OnPost(int index = 0)
+        public IActionResult OnPost()
         {
-            if (index < TotalQuestions)
+            if (!ModelState.IsValid)
             {
-                var questionText = _questionService.ShuffledQuestions[index].QuestionText;
-                _questionService.AddUserAnswer(questionText, UserAnswer);
-                return RedirectToPage("/Ask", new { index = index + 1 });
+                return Page();
             }
 
-            return RedirectToPage("/Result");
-        }
+            // Example: store the answer temporarily
+            TempData["LastAnswer"] = UserAnswer.AnswerText ?? string.Empty;
 
-        public static QuestionService GetService() => _questionService;
+            // Redirect to a result page (should exist as Pages/Result.cshtml)
+            return RedirectToPage("Result");
+        }
     }
 }
+EOF
