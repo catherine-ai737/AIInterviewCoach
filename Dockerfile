@@ -1,17 +1,19 @@
+# Use the official .NET SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy csproj and restore as distinct layers
-COPY ["AIInterviewCoach.csproj", "./"]
-RUN dotnet restore "AIInterviewCoach.csproj"
+# Copy the project file and restore dependencies
+COPY AIInterviewCoach.csproj .
+RUN dotnet restore AIInterviewCoach.csproj
 
-# Copy everything else and build
+# Copy the rest of the app and build
 COPY . .
-RUN dotnet publish "AIInterviewCoach.csproj" -c Release -o /app/publish
+RUN dotnet publish AIInterviewCoach.csproj -c Release -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+# Use the ASP.NET runtime image to run the app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
 
-EXPOSE 80
 ENTRYPOINT ["dotnet", "AIInterviewCoach.dll"]
+
